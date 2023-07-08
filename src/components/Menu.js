@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import MenuItem from './MenuItem'
 import Receipt from './Receipt'
 
@@ -42,22 +42,33 @@ const menuItems = [
 ]
 
 function Menu() {
+  const [purchasedItem, setPurchasedItem] = useState([]);
+
+  const addPurchasedItem = (getPurchasedItem) => {
+    setPurchasedItem([...purchasedItem, getPurchasedItem]);
+  };
+
+  const removePurchasedItem = (name) => {
+    setPurchasedItem(purchasedItem.filter(item => name != item.name))
+  }
+
   return (
     <section>
       <dl>
-        {menuItems.map(menuItem => {
-          return (
-            <MenuItem
-              name={menuItem.name}
-              price={menuItem.price}
-              picture={menuItem.picture}
-            />
-          )
-        })}
+        {menuItems.map((menuItem) => (
+          <MenuItem
+            key={menuItem.name}
+            name={menuItem.name}
+            price={menuItem.price}
+            picture={menuItem.picture}
+            addPurchasedItem={addPurchasedItem}
+            removePurchasedItem = {removePurchasedItem}
+          />
+        ))}
       </dl>
-      <Receipt purchasedItems={[]} />
+      <Receipt purchasedItems={purchasedItem} />
     </section>
-  )
+  );
 }
 
-export default Menu
+export default Menu;
